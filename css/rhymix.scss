@@ -1,0 +1,125 @@
+.rx-tinymce8 {
+	--rx-tinymce8-border: #c5c5c5;
+	--rx-tinymce8-background: #fff;
+	--rx-tinymce8-text: #222f3e;
+	position: relative;
+	width: 100%;
+	box-sizing: border-box;
+	color-scheme: light;
+}
+
+.rx-tinymce8 *,
+.rx-tinymce8 *::before,
+.rx-tinymce8 *::after {
+	box-sizing: border-box;
+}
+
+.rx-tinymce8__loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: calc(var(--rx-tinymce8-height, 300px) + 90px);
+	border: 1px solid var(--rx-tinymce8-border);
+	background: var(--rx-tinymce8-background);
+	color: #666;
+}
+
+.rx-tinymce8__source {
+	display: none;
+}
+
+.rx-tinymce8--ready .rx-tinymce8__loading {
+	display: none;
+}
+
+.rx-tinymce8 .tox-tinymce {
+	width: 100%;
+}
+
+.rx-tinymce8:not(.rx-tinymce8--toolbar-hidden):not(.rx-tinymce8--toolbar-disabled) .tox-editor-header {
+	padding-inline-end: 42px;
+}
+
+.rx-tinymce8--toolbar-hidden {
+	padding-top: 42px;
+}
+
+.rx-tinymce8--toolbar-hidden::before {
+	content: "";
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	right: 0;
+	left: 0;
+	height: 42px;
+	border: 1px solid var(--rx-tinymce8-border);
+	border-bottom: 0;
+	border-radius: 6px 6px 0 0;
+	background: var(--rx-tinymce8-background);
+	pointer-events: none;
+}
+
+.rx-tinymce8--toolbar-hidden .tox-editor-header {
+	display: none !important;
+}
+
+.rx-tinymce8__toolbar-toggle {
+	position: absolute;
+	z-index: 3;
+	top: 4px;
+	right: 4px;
+	width: 34px;
+	height: 34px;
+	margin: 0;
+	padding: 0;
+	border: 1px solid var(--rx-tinymce8-border);
+	border-radius: 4px;
+	background: var(--rx-tinymce8-background);
+	color: var(--rx-tinymce8-text);
+	font: 700 18px/32px sans-serif;
+	cursor: pointer;
+	touch-action: manipulation;
+}
+
+.rx-tinymce8__toolbar-toggle:focus-visible {
+	outline: 2px solid #2276d2;
+	outline-offset: 1px;
+}
+
+.rx-tinymce8__error {
+	min-height: 100px;
+	padding: 16px;
+	border: 1px solid #d63638;
+	background: #fff5f5;
+	color: #9b1c1c;
+	white-space: pre-wrap;
+}
+
+.rx-tinymce8--dark {
+	--rx-tinymce8-border: #5c5f66;
+	--rx-tinymce8-background: #222f3e;
+	--rx-tinymce8-text: #f2f4f6;
+	color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+	.rx-tinymce8--auto {
+		--rx-tinymce8-border: #5c5f66;
+		--rx-tinymce8-background: #222f3e;
+		--rx-tinymce8-text: #f2f4f6;
+		color-scheme: dark;
+	}
+}
+
+@media (max-width: 767px) {
+	.rx-tinymce8__toolbar-toggle {
+		width: 36px;
+		height: 36px;
+		top: 3px;
+		right: 3px;
+	}
+
+	.rx-tinymce8:not(.rx-tinymce8--toolbar-hidden):not(.rx-tinymce8--toolbar-disabled) .tox-editor-header {
+		padding-inline-end: 42px;
+	}
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skin version="0.2">
+	<title xml:lang="en">TinyMCE 8</title>
+	<title xml:lang="ko">TinyMCE 8</title>
+	<description xml:lang="en">TinyMCE 8 editor skin for Rhymix</description>
+	<description xml:lang="ko">라이믹스용 TinyMCE 8 에디터 스킨</description>
+	<version>0.1.0</version>
+	<date>2026-07-18</date>
+	<author email_address="yjsoft@yjsoft.xyz">
+		<name xml:lang="en">YJSoft</name>
+		<name xml:lang="ko">YJSoft</name>
+	</author>
+	<colorset>
+		<color name="auto">
+			<title xml:lang="en">Auto</title>
+			<title xml:lang="ko">자동</title>
+		</color>
+		<color name="light">
+			<title xml:lang="en">Light</title>
+			<title xml:lang="ko">라이트</title>
+		</color>
+		<color name="dark">
+			<title xml:lang="en">Dark</title>
+			<title xml:lang="ko">다크</title>
+		</color>
+	</colorset>
+</skin>
