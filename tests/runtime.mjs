@@ -239,12 +239,15 @@ try {
 	await page.waitForFunction(() => document.querySelector('#form-301 textarea[name="content"]').value.includes('poll_srl="999"'));
 	await page.evaluate(() => {
 		editorReplaceHTML(editorGetIFrame(301), '<img src="/files/gallery.png" editor_component="image_gallery" gallery_style="slide">');
+		window.editorPrevSrl = 301;
+		editorReplaceHTML(document.createElement('div'), '<img src="/files/poll.png" editor_component="poll_maker" poll_srl="123">');
 		editorRelKeys[301].pasteHTML('<img src="/files/emoticon.png" class="emoticon" alt="emoji">');
 	});
 	await page.waitForFunction(() => {
 		const html = _getCkeInstance(301).getData();
-		return html.includes('editor_component="image_gallery"') && html.includes('class="emoticon"');
+		return html.includes('editor_component="image_gallery"') && html.includes('poll_srl="123"') && html.includes('class="emoticon"');
 	});
+	assert.doesNotMatch(await page.evaluate(() => _getCkeInstance(302).getData()), /poll_srl="123"/);
 
 	await page.evaluate(() => {
 		_getCkeInstance(301).insertHtml('<p><img src="/files/native.png" alt="native" editor_component="image_link" data-file-srl="777"></p>', 'unfiltered_html');

@@ -382,14 +382,43 @@
 		};
 	}
 
-	function sequenceFromFrame(frame) {
-		if (!frame) return 0;
-		return normalizeSequence(
-			frame.editor_sequence ||
-			(frame.dataset && frame.dataset.editorSequence) ||
-			(frame.contentDocument && frame.contentDocument.body && frame.contentDocument.body.getAttribute('editor_sequence')) ||
-			String(frame.id || '').replace(/^.*_/, '')
-		);
+	function findBridgeForFrame(frame) {
+		const element = frame && frame.jquery ? frame[0] : frame;
+		const candidates = [
+			element && element.editor_sequence,
+			element && element.dataset && element.dataset.editorSequence,
+			typeof (element && element.getAttribute) === 'function' ? element.getAttribute('editor_sequence') : null,
+			typeof (element && element.getAttribute) === 'function' ? element.getAttribute('data-editor-sequence') : null,
+			String(element && element.id || '').match(/_(\d+)$/)?.[1],
+		];
+
+		try {
+			candidates.push(element && element.contentDocument && element.contentDocument.body && element.contentDocument.body.getAttribute('editor_sequence'));
+		} catch (error) {
+			// A foreign iframe may not expose its document. Try the remaining identifiers.
+		}
+
+		if (typeof (element && element.closest) === 'function') {
+			const wrapper = element.closest('[data-editor-sequence]');
+			candidates.push(wrapper && wrapper.dataset.editorSequence);
+		}
+
+		for (const candidate of candidates) {
+			const bridge = registry[normalizeSequence(candidate)];
+			if (bridge) return bridge;
+		}
+
+		for (const bridge of Object.values(registry)) {
+			if (element === bridge.iframe || element === bridge.wrapper || element === bridge.editor?.getBody()) return bridge;
+			try {
+				if (element && bridge.wrapper.contains(element)) return bridge;
+			} catch (error) {
+				// Non-DOM compatibility objects cannot be passed to Node.contains().
+			}
+		}
+
+		// Rhymix sets editorPrevSrl before opening every editor component popup.
+		return registry[normalizeSequence(window.editorPrevSrl)] || null;
 	}
 
 	function removeDeletedFiles(bridge, fileSrls) {
@@ -488,7 +517,7 @@
 				: (typeof previous.getFrame === 'function' ? previous.getFrame(sequence) : null);
 		};
 		window.editorReplaceHTML = (frame, html) => {
-			const bridge = registry[sequenceFromFrame(frame)];
+			const bridge = findBridgeForFrame(frame);
 			if (bridge) return insertHtml(bridge, html);
 			if (typeof previous.replaceHtml === 'function') return previous.replaceHtml(frame, html);
 		};

@@ -1,3 +1,4 @@
+@includeIf ('config.user')
 @php
 
 /**
@@ -7,8 +8,9 @@
  * @license GPL-2.0-or-later
  */
 
-// TinyMCE 라이선스가 있다면 아래 GPL을 실제 라이선스 키로 교체해주세요.
-$tinymce8_license = 'GPL';
+if (!isset($tinymce8_license)) {
+    $tinymce8_license = 'GPL';
+}
 
 // 이 아래부터는 수정하지 말아주세요.
 $tinymce8_sequence = (int)($editor_sequence ?? 0);
