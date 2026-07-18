@@ -43,7 +43,7 @@ jobs:
         id: changes
         run: |
           status_file="${RUNNER_TEMP}/tinymce-update-status"
-          git status --porcelain -- package.json package-lock.json README.md vendor/tinymce > "$status_file"
+          git status --porcelain -- package.json package-lock.json vendor/tinymce > "$status_file"
           if [[ -s "$status_file" ]]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
@@ -58,6 +58,6 @@ jobs:
           tinymce_version="$(node -p "require('./package.json').dependencies.tinymce")"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- package.json package-lock.json README.md vendor/tinymce
+          git add -- package.json package-lock.json vendor/tinymce
           git commit -m "[no-ci] Update TinyMCE to ${tinymce_version}"
           git push origin "HEAD:${BRANCH_NAME}"
