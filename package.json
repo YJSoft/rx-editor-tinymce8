@@ -11,7 +11,7 @@
     "test:runtime": "node tests/runtime.mjs"
   },
   "dependencies": {
-    "tinymce": "8.8.0"
+    "tinymce": "8.8.2"
   },
   "devDependencies": {
     "playwright": "1.61.1"
