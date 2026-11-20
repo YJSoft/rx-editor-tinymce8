@@ -1,5 +1,5 @@
 /**
- * TinyMCE version 8.8.2 (2026-07-27)
+ * TinyMCE version 8.10.2 (2026-11-11)
  */
 
 (function () {
@@ -1434,26 +1434,28 @@
                 changeSrc(helpers, info, state, api);
                 api.focus('src');
             };
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            blobToDataUri(file).then((dataUrl) => {
-                const blobInfo = helpers.createBlobCache(file, blobUri, dataUrl);
+            const handleError = (err) => {
+                finalize();
+                info.alertErr(err, () => {
+                    api.focus('fileinput');
+                });
+            };
+            blobToDataUri(file)
+                .then((dataUrl) => helpers.createBlobCache(file, blobUri, dataUrl))
+                .then((blobInfo) => {
                 if (info.automaticUploads) {
                     helpers.uploadImage(blobInfo).then((result) => {
                         updateSrcAndSwitchTab(result.url);
                         finalize();
-                    }).catch((err) => {
-                        finalize();
-                        info.alertErr(err, () => {
-                            api.focus('fileinput');
-                        });
-                    });
+                    }).catch(handleError);
                 }
                 else {
                     helpers.addToBlobCache(blobInfo);
                     updateSrcAndSwitchTab(blobInfo.blobUri());
                     api.unblock();
                 }
-            });
+            })
+                .catch(() => handleError('Failed to upload image'));
         });
     };
     const changeHandler = (helpers, info, state) => (api, evt) => {
@@ -1502,6 +1504,7 @@
         // Since the style field was removed that process must be simulated on submit.
         const finalData = {
             ...data,
+            isDecorative: info.hasAccessibilityOptions && data.isDecorative,
             style: getStyleValue(helpers.normalizeCss, toImageData(data, false))
         };
         editor.execCommand('mceUpdateImage', false, toImageData(finalData, info.hasAccessibilityOptions));
@@ -1660,12 +1663,16 @@
         });
     };
 
+    const PLUGIN_CODE = 'image';
     var Plugin = () => {
-        global$4.add('image', (editor) => {
+        global$4.add(PLUGIN_CODE, (editor) => {
             register$2(editor);
             setup(editor);
             register(editor);
             register$1(editor);
+            return {
+                getMetadata: () => ({ name: 'Image', type: 'opensource', slug: PLUGIN_CODE })
+            };
         });
     };
 
